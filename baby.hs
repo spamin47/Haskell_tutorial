@@ -1,3 +1,4 @@
+import System.Win32 (xBUTTON1)
 --Load funtion with ":l baby"
 
 doubleMe x = x + x
@@ -45,12 +46,74 @@ rightTriangles p= [(a,b,c) | c <- [1..10], b<-[1..10],a<-[1..10],
  a^2+b^2 == c^2,
  a+b+c == p]
 
--- length' [] = 0
--- length' (_:xs) = 1+ length' xs
+length' [] = 0
+length' (_:xs) = 1+ length' xs
 
---Factorial
+--Factorial with recursion
 factorial 0 = 1
 factorial n = n * factorial (n - 1)
 
 
 --case expressions
+
+--recursion
+maximum':: (Ord a) => [a] -> a
+maximum' [] = error "maximum of empty list"
+maximum' [x] = x
+maximum' (x:xs)
+    | x > maxTail = x
+    | otherwise = maxTail 
+    where maxTail = maximum' xs
+
+maximum'':: (Ord a) => [a] -> a
+maximum'' [] = error "maximum of empty list"
+maximum'' [x] = x
+maximum'' (x:xs) = max x (maximum' xs)
+
+--replicate a char n times
+replicate' :: (Num i, Ord i) => i -> a -> [a]
+replicate' n x
+    | n <=0 = []
+    | otherwise = x:replicate' (n-1) x
+
+--QuickSort
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) = 
+    let smallerSorted = quicksort [a | a <- xs, a <= x]
+        biggerSorted = quicksort[a | a <- xs, a > x]
+    in smallerSorted ++ [x] ++ biggerSorted
+    
+-- ghci> quicksort [10,2,5,3,1,6,7,4,2,3,4,8,9]  
+-- [1,2,2,3,3,4,4,5,6,7,8,9,10]  
+-- ghci> quicksort "the quick brown fox jumps over the lazy dog"  
+-- "        abcdeeefghhijklmnoooopqrrsttuuvwxyz"  
+largestDivisible :: (Integral a) => a
+largestDivisible = head (filter p [100000,99999..])
+    where p x = x `mod` 3829 == 0 
+
+-- Map
+    -- add a b of (a,b) in list
+testMap1 = map(\(a,b) -> a + b) [(1,2),(3,5),(6,3),(2,6),(2,5)]
+
+--foldl
+    --returns the sum of a list
+sum' :: (Num a) => [a] -> a
+sum' xs = foldl (\acc x -> acc + x) 0 xs
+
+-- Function composition with map
+testMap2 = map(\x -> negate (abs x)) [5,-3,-6,7,3,2,1]
+testMap2' = map(negate.abs)[5,-3,-6,7,3,2,1]
+
+-- Data.Map
+phoneBook =   
+    [("betty","555-2938")  
+    ,("bonnie","452-2928")  
+    ,("patsy","493-2928")  
+    ,("lucille","205-2928")  
+    ,("wendy","939-8282")  
+    ,("penny","853-2492")  
+    ] 
+
+findKey :: (Eq k) => k -> [(k,v)] -> v 
+findKey key xs = snd . head . filter (\(k,v) -> key == k) $ xs
