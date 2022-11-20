@@ -118,23 +118,24 @@ phoneBook =
 findKey :: (Eq k) => k -> [(k,v)] -> v 
 findKey key xs = snd . head . filter (\(k,v) -> key == k) $ xs
 
-counter x = (\x -> (\x -> (x + 1))(x + 1))x
 
+--CS 152 HW4
+--Q1
+counter x = (\x -> (\x -> (x + 1))(x + 1))x
+--Q2
 subseq a b ls = do
     let x = drop a ls
     reverse (drop (length ls - b) (reverse x))
-
-myTail [] = []
+--Q3
+myTail [] = [] -- handles empty list
 myTail ls = tail ls
-
+--Q4
 myReverse [] = []
 myReverse ls = myReverse (tail ls) ++ [] ++ [head ls] 
-
-
+--Q5
 myHarmonics 0 = 0
 myHarmonics n = 1/n + myHarmonics (n - 1)
-
-
+--Q7
 fibonacci 0 = 0
 fibonacci 1 = 1
 fibonacci n = fibonacci(n-1) + fibonacci(n-2)
